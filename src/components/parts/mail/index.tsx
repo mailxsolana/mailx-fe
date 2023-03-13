@@ -62,6 +62,7 @@ const Mail = () => {
             pdasToEmailAddresses(cwallet, pdas).then((pdasParsed: any) => {
 
                 res.forEach((r: any, index: number) => {
+                    console.log(r)
                     parsed.push({
                         from: bufferToText(pdasParsed[index].address) + "@" + bufferToText(pdasParsed[index].domain),
                         fromCkey: serializeUint8Array(pdasParsed[index].ckey),
@@ -69,7 +70,7 @@ const Mail = () => {
                         body: bufferToText(r.account.body),
                         fromPk: pdasParsed[index].owner.toString(),
                         pk: r.publicKey.toString(),
-                        timestamp: moment(r.account.timestamp).calendar(),
+                        timestamp: moment(r.account.timestamp.toNumber() * 1000).calendar(),
                         //date: new Date(r.account.date)
                     })
                 })
@@ -105,7 +106,7 @@ const Mail = () => {
                         body: bufferToText(r.account.body),
                         fromPk: pdasParsed[index].owner.toString(),
                         pk: r.publicKey.toString(),
-                        timestamp: moment(r.account.timestamp).calendar(),
+                        timestamp: moment(r.account.timestamp.toNumber() * 1000).calendar(),
                         //date: new Date(r.account.date)
                     })
                 })
