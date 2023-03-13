@@ -53,7 +53,6 @@ export const cwalletProvider = (cwallet: Keypair) => {
     return {
         sendTransaction: async (tx:any,provider:any,config:any) => {
 
-            console.log(tx)
 
             tx.recentBlockhash = (await SOLANA_CONNECTION_BUNDLR.getLatestBlockhash("finalized")).blockhash;
             tx.feePayer = cwallet.publicKey;
@@ -67,7 +66,6 @@ export const cwalletProvider = (cwallet: Keypair) => {
         },
         signMessage:(data:Uint8Array) => {
 
-            console.log(data)
 
             const signature = nacl.sign.detached(data, cwallet.secretKey);
             return signature;

@@ -103,7 +103,7 @@ export const sendMail = async (cwallet: any, to: string, subject: string, body: 
             console.log("Converted Balance: ", convertedBalance);
             console.log("price: ", price);*/
 
-            await bundlr.fund(price);
+            await bundlr.fund(price, 1.1);
             const tags = [{ name: "Content-Type", value: "application/json" }];
             let tx = await bundlr.upload(content, {
                 tags

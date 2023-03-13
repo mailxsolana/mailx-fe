@@ -33,7 +33,10 @@ export const UpperLeft = styled.div`
 `
 
 export const Sender = styled.div`
-
+    & span {
+        color:${color.darkerGray};
+        font-size:14px;
+    }
 `
 
 export const Date = styled.div`

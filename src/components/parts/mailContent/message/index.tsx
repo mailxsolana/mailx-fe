@@ -9,8 +9,8 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { decrypt } from "utils/encryption";
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { deserializeUint8Array } from "utils/helpers";
-import { deleteMail } from "services/solana/mail";
+import { bufferToText, deserializeUint8Array } from "utils/helpers";
+import { deleteMail, pdasToEmailAddresses } from "services/solana/mail";
 
 const MessageMailContent = () => {
 
@@ -18,6 +18,7 @@ const MessageMailContent = () => {
     const currentMail = useSelector((state: any) => state.data.currentMail)
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
     const dispatch = useDispatch()
+    const [to, setTo] = React.useState<any>("")
 
     const [body, setBody] = React.useState<any>(null);
 
@@ -27,6 +28,12 @@ const MessageMailContent = () => {
             return;
 
         setBody(null)
+        setTo("")
+
+        pdasToEmailAddresses(cwallet, [currentMail.to]).then((res: any) => {
+            if (res)
+                setTo(bufferToText(res[0].address) + "@" + bufferToText(res[0].domain))
+        })
 
         //if currentMail.body starts with ar://, then it's an arweave link
         if (currentMail.body.startsWith("ar://")) {
@@ -89,7 +96,10 @@ const MessageMailContent = () => {
                 <C.UpperContent>
                     <C.UpperLeft>
                         <C.Sender>
-                            {currentMail.from}
+                            <span>from:</span> {currentMail.from}
+                        </C.Sender>
+                        <C.Sender>
+                            <span>to:</span> {to}
                         </C.Sender>
                         <C.Date>
                             {currentMail.timestamp}
