@@ -79,6 +79,9 @@ export const Hero = styled.div`
     background: #D8E1F3;
     padding-top:80px;
     border-radius:16px;
+    background: url('/bg.png');
+    background-size: cover;
+    background-repeat: repeat;
 `
 
 export const HeroText = styled.div`
