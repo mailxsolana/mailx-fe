@@ -1,0 +1,2 @@
+MailX
+Decentralized Sol Mail

@@ -1,0 +1,32 @@
+html {
+    overflow-x: hidden
+}
+
+body {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    color:#111827;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'AlbertSans', 'Poppins', sans-serif;
+}
+
+.ck-editor__editable_inline {
+    min-height: 400px;
+}
+
+.devnet{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(25, 113, 244, 0.1);
+    pointer-events: none;
+    color: #5d5d5d;
+    text-align: center;
+    font-size: 12px;
+}

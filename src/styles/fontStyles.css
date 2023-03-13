@@ -1,0 +1,71 @@
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("styles/fonts/Poppins-Regular.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("styles/fonts/Poppins-Medium.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("styles/fonts/Poppins-Bold.ttf") format("truetype");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("styles/fonts/Poppins-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: local("Poppins"),
+        url("styles/fonts/Poppins-Light.ttf") format("truetype");
+    font-weight: 300;
+}
+
+/**/
+
+@font-face {
+    font-family: "AlbertSans";
+    src: local("AlbertSans"),
+        url("styles/fonts/AlbertSans-Regular.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "AlbertSans";
+    src: local("AlbertSans"),
+        url("styles/fonts/AlbertSans-Medium.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "AlbertSans";
+    src: local("AlbertSans"),
+        url("styles/fonts/AlbertSans-Bold.ttf") format("truetype");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "AlbertSans";
+    src: local("AlbertSans"),
+        url("styles/fonts/AlbertSans-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "AlbertSans";
+    src: local("AlbertSans"),
+        url("styles/fonts/AlbertSans-Light.ttf") format("truetype");
+    font-weight: 300;
+}
