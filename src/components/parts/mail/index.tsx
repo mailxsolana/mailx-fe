@@ -7,6 +7,7 @@ import { setCurrentMail, setRefreshInbox, setRefreshSent } from "services/slices
 import { getInbox, getSent, pdasToEmailAddresses } from "services/solana/mail"
 import { bufferToText, limitString, removeHtmlTags, serializeUint8Array } from "utils/helpers"
 import * as C from "./style"
+import moment from "moment"
 
 const Mail = () => {
 
@@ -68,6 +69,7 @@ const Mail = () => {
                         body: bufferToText(r.account.body),
                         fromPk: pdasParsed[index].owner.toString(),
                         pk: r.publicKey.toString(),
+                        timestamp: moment(r.account.timestamp).calendar(),
                         //date: new Date(r.account.date)
                     })
                 })
@@ -103,6 +105,7 @@ const Mail = () => {
                         body: bufferToText(r.account.body),
                         fromPk: pdasParsed[index].owner.toString(),
                         pk: r.publicKey.toString(),
+                        timestamp: moment(r.account.timestamp).calendar(),
                         //date: new Date(r.account.date)
                     })
                 })
@@ -136,7 +139,7 @@ const Mail = () => {
                     </C.Refresh>
                 </C.UpperHead>
                 <C.Description>
-                    16 Messages
+                    {mails.length === 1 || mails.length === 0 ? mails.length +" mail" : mails.length + " mails"}
                 </C.Description>
                 <C.Search>
                     <input type="text" placeholder="Search" />
@@ -151,7 +154,7 @@ const Mail = () => {
                                 {m.from}
                             </C.Sender>
                             <C.Date>
-                                1 hour ago
+                                {m.timestamp}
                             </C.Date>
                         </C.MailItemUpper>
                         <C.MailItemLower>

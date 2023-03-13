@@ -92,7 +92,7 @@ const MessageMailContent = () => {
                             {currentMail.from}
                         </C.Sender>
                         <C.Date>
-                            1 hour ago
+                            {currentMail.timestamp}
                         </C.Date>
                     </C.UpperLeft>
                     <C.UpperRight>
