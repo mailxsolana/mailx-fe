@@ -62,7 +62,6 @@ const Mail = () => {
             pdasToEmailAddresses(cwallet, pdas).then((pdasParsed: any) => {
 
                 res.forEach((r: any, index: number) => {
-                    console.log(r)
                     parsed.push({
                         from: bufferToText(pdasParsed[index].address) + "@" + bufferToText(pdasParsed[index].domain),
                         fromCkey: serializeUint8Array(pdasParsed[index].ckey),
