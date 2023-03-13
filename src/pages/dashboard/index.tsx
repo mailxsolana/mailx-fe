@@ -153,7 +153,7 @@ const Dashboard = () => {
 
         //verify address does not contain punctuation
         if (domain.trim().match(/^[a-zA-Z0-9]+$/g) === null) {
-            toast.error("Username can only contain letters and numbers")
+            toast.error("Domain can only contain letters and numbers")
             return;
         }
 
