@@ -146,7 +146,7 @@ const Mail = () => {
             <C.Upper>
                 <C.UpperHead>
                     <C.Title>
-                        Inbox
+                        {mailPage === "inbox" ? "Inbox" : "Sent"}
                     </C.Title>
                     <C.Refresh>
                         <FontAwesomeIcon icon={faSync} onClick={() => loadInbox()} spin={refreshing} />

@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCloudWallet, setCreateForSomeone, setCurrentWallet, setCustomDomain, setMailAccount, setMailAccountCreationRequests } from "services/slices/data";
+import { setCloudWallet, setCreateForSomeone, setCurrentMail, setCurrentWallet, setCustomDomain, setMailAccount, setMailAccountCreationRequests, setMailPage } from "services/slices/data";
 import { showCustomDomainPopup, showDepositPopup, showMailAccountRequestsPopup, showWithdrawPopup } from "services/slices/popup";
 import { airdropSol } from "services/solana/connection";
 import { generateCloudWalletKeypair } from "services/solana/cwallet";
@@ -55,6 +55,11 @@ const Dashboard = () => {
     const [myMailAccountsLoading, setMyMailAccountsLoading] = useState<any>(false)
     const [myMailAccounts, setMyMailAccounts] = useState<any>([])
     const [createAccountTab, setCreateAccountTab] = useState<any>("forme")
+
+    useEffect(() => {
+        dispatch(setCurrentMail(null))
+        dispatch(setMailPage("inbox"))
+    }, [])
 
     useEffect(() => {
 
