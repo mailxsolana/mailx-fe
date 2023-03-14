@@ -62,3 +62,8 @@ export const airdropSol = async (publicKey: PublicKey, amount: number) => {
     }
     return true
 }
+
+export const estimateTransactionFeeForSize = async (size: number): Promise<number> => {
+    const minBalance = await SOLANA_CONNECTION.getMinimumBalanceForRentExemption(size);
+    return minBalance * 1.25
+};

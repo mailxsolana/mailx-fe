@@ -106,7 +106,6 @@ const Mail = () => {
             pdasToEmailAddresses(cwallet, pdas).then((pdasParsed: any) => {
 
                 res.forEach((r: any, index: number) => {
-                    console.log(r)
                     parsed.push({
                         from: bufferToText(pdasParsed[index].address) + "@" + bufferToText(pdasParsed[index].domain),
                         subject: bufferToText(r.account.subject),

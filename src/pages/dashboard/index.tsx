@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCloudWallet, setCreateForSomeone, setCustomDomain, setMailAccount, setMailAccountCreationRequests } from "services/slices/data";
+import { setCloudWallet, setCreateForSomeone, setCurrentWallet, setCustomDomain, setMailAccount, setMailAccountCreationRequests } from "services/slices/data";
 import { showCustomDomainPopup, showDepositPopup, showMailAccountRequestsPopup, showWithdrawPopup } from "services/slices/popup";
 import { airdropSol } from "services/solana/connection";
 import { generateCloudWalletKeypair } from "services/solana/cwallet";
@@ -48,12 +48,23 @@ const Dashboard = () => {
     const createForSomeone = useSelector((state: any) => state.data.createForSomeone)
     const mailAccountCreationRequests = useSelector((state: any) => state.data.mailAccountCreationRequests)
     const refreshAccountsDashboard = useSelector((state: any) => state.data.refreshAccountsDashboard)
+    const currentWallet = useSelector((state: any) => state.data.currentWallet)
     const mailAccountInput = useRef<any>(null)
     const mailAccountInputPublicKey = useRef<any>(null)
     const [mailAccountRegisterLoading, setMailAccountRegisterLoading] = useState<any>(false)
     const [myMailAccountsLoading, setMyMailAccountsLoading] = useState<any>(false)
     const [myMailAccounts, setMyMailAccounts] = useState<any>([])
     const [createAccountTab, setCreateAccountTab] = useState<any>("forme")
+
+    useEffect(() => {
+
+        if (connected && publicKey && currentWallet && publicKey.toBase58() !== currentWallet)
+        {
+            navigate("/login")
+
+        }
+
+    }, [publicKey])
 
     useEffect(() => {
 
@@ -71,6 +82,7 @@ const Dashboard = () => {
                     getOwnedMailAccounts()
                     mailAccountRequests()
                     setUnlocked(true)
+                    dispatch(setCurrentWallet(publicKey!.toBase58()))
 
                 }).catch((err: any) => {
                     navigate("/login")
@@ -80,6 +92,7 @@ const Dashboard = () => {
                 getOwnedMailAccounts()
                 mailAccountRequests()
                 setUnlocked(true)
+                dispatch(setCurrentWallet(publicKey!.toBase58()))
             }
 
         } else {

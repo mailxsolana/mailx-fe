@@ -1,6 +1,6 @@
 import { PublicKey, LAMPORTS_PER_SOL, Connection, Transaction, ComputeBudgetProgram, sendAndConfirmTransaction, Keypair } from '@solana/web3.js'
 import * as anchor from "@project-serum/anchor"
-import { SOLANA_CONNECTION, SOLANA_CONNECTION_FINALIZED, WaitForTransaction } from './connection'
+import { estimateTransactionFeeForSize, SOLANA_CONNECTION, SOLANA_CONNECTION_FINALIZED, WaitForTransaction } from './connection'
 import { Wallet } from "@project-serum/anchor/dist/cjs/provider"
 import { store } from 'services/store'
 import { IDL } from './types'
@@ -28,17 +28,6 @@ export const sendMail = async (cwallet: any, to: string, subject: string, body: 
     if (subject.trim().length == 0) {
         toast.error("Message subject cannot be empty")
         return Promise.reject(false)
-    }
-    try {
-        let balance = await balanceOf(cwallet.publicKey)
-        console.log(balance)
-        if (balance === 0) {
-            toast.error("Insufficient funds please deposit some SOL")
-            return Promise.reject("fund")
-        }
-    } catch (e) {
-        toast.error("Insufficient funds please deposit some SOL")
-        return Promise.reject("fund")
     }
 
     let loading = toast.loading("Loading...")
@@ -97,6 +86,24 @@ export const sendMail = async (cwallet: any, to: string, subject: string, body: 
         try {
 
             let price = await bundlr.getPrice(sizeInBytes);
+
+            let totalFees = price.toNumber() * 1.1 + (await estimateTransactionFeeForSize(MAIL_SIZE))
+
+
+            try {
+                let balance = await balanceOf(cwallet.publicKey)
+                if (balance * LAMPORTS_PER_SOL < totalFees) {
+                    toast.error("Insufficient funds please deposit some SOL")
+                    toast.dismiss(loading)
+                    return Promise.reject("fund")
+                }
+            } catch (e) {
+                toast.error("Insufficient funds please deposit some SOL")
+                toast.dismiss(loading)
+                return Promise.reject("fund")
+            }
+
+
             let atomicBalance = await bundlr.getLoadedBalance();
             let convertedBalance = bundlr.utils.unitConverter(atomicBalance);
             /*console.log("Atomic balance: ", atomicBalance);

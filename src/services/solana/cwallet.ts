@@ -1,6 +1,6 @@
 import { PublicKey, LAMPORTS_PER_SOL, Connection, Transaction, ComputeBudgetProgram, SystemProgram, sendAndConfirmTransaction } from '@solana/web3.js'
 import * as anchor from "@project-serum/anchor"
-import { SOLANA_CONNECTION, WaitForTransaction } from './connection'
+import { SOLANA_CONNECTION, SOLANA_CONNECTION_FINALIZED, WaitForTransaction } from './connection'
 import crypto from 'crypto'
 import { serializeUint8Array } from 'utils/helpers'
 import toast from 'react-hot-toast'
@@ -78,11 +78,11 @@ export const depositTo = async (publicKey: string, amount: any, authority: any) 
         })
     );
 
-    tx.recentBlockhash = (await SOLANA_CONNECTION.getLatestBlockhash("finalized")).blockhash;
+    tx.recentBlockhash = (await SOLANA_CONNECTION_FINALIZED.getLatestBlockhash("finalized")).blockhash;
     tx.feePayer = authority.publicKey;
 
     const signed = await authority.signTransaction(tx);
-    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "finalized" });
+    const sig = await SOLANA_CONNECTION_FINALIZED.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "finalized" });
     let loading = toast.loading("Depositing...")
 
     try {

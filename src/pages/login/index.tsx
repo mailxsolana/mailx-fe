@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCloudWallet, setMailAccount } from "services/slices/data";
+import { setCloudWallet, setCurrentWallet, setMailAccount } from "services/slices/data";
 import { generateCloudWalletKeypair } from "services/solana/cwallet";
 import { checkMailAccount, createMailAccount } from "services/solana/mailAccount";
 import { bufferToText } from "utils/helpers";
@@ -18,6 +18,7 @@ const Login = () => {
     const { publicKey, signMessage, connected, connect, signTransaction, signAllTransactions } = useWallet()
     const cloudWallet = useSelector((state: any) => state.data.cloudWallet)
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
+    const currentWallet = useSelector((state: any) => state.data.currentWallet)
     const dispatch = useDispatch()
 
     const [currentState, setCurrentState] = React.useState<any>("login")
@@ -25,8 +26,33 @@ const Login = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        handleSign()
+
+        dispatch(setCloudWallet(null))
+        dispatch(setMailAccount(null))
+        dispatch(setMailAccount(null))
+        dispatch(setCurrentWallet(null))
+
+    }, [])
+
+    useEffect(() => {
+        if (connected){
+            dispatch(setCurrentWallet(publicKey!.toBase58()))
+            handleSign()
+        }
     }, [connected])
+
+    useEffect(() => {
+
+        if (connected && publicKey && mailAccount && !cloudWallet)
+        {
+            dispatch(setCloudWallet(null))
+            dispatch(setMailAccount(null))
+            dispatch(setMailAccount(null))
+            dispatch(setCurrentWallet(publicKey!.toBase58()))
+            handleSign()
+        }
+
+    }, [publicKey])
 
     const handleSign = async () => {
         if (connected && !cloudWallet) {
