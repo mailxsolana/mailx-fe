@@ -111,7 +111,7 @@ const Home = () => {
                             <C.S1P1Metrics>
                                 <C.S1P1Metric>
                                     <C.S1P1MetricTitle>
-                                        110.000<span>+</span>
+                                        5.000<span>+</span>
                                     </C.S1P1MetricTitle>
                                     <C.S1P1MetricDesc>
                                         Sent Emails
@@ -119,7 +119,7 @@ const Home = () => {
                                 </C.S1P1Metric>
                                 <C.S1P1Metric>
                                     <C.S1P1MetricTitle>
-                                        25.000<span>+</span>
+                                        1.000<span>+</span>
                                     </C.S1P1MetricTitle>
                                     <C.S1P1MetricDesc>
                                         Mail Accounts
