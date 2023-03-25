@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { deviceMax } from "styles/media"
 import { color } from "styles/theme"
 import { Hex2Rgba } from "utils/helpers"
 
@@ -14,6 +15,10 @@ export const EmptyMailContent = styled.div`
     }
     user-select:none;
     pointer-events:none;
+
+    @media ${deviceMax.md} {
+        display:none;
+    }
 `
 
 export const Title = styled.div`

@@ -1,45 +1,43 @@
-import { Link } from "react-router-dom"
 import styled from "styled-components"
 import { deviceMax } from "styles/media"
 import { color } from "styles/theme"
 import { Hex2Rgba } from "utils/helpers"
 
 export const Sidebar = styled.div`
-    width:264px;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    min-height:100vh;
-    border-right:1px solid ${color.lighterGray};
+    padding-top:90px;
 `
 
-export const Upper = styled.div`
-    background-color: ${color.lighterGray};
-    padding:16px;
+export const Header = styled.div`
     display:flex;
-    flex-direction:column;
+    background-color: ${color.lighterGray};
+    align-items:center;
+    padding:16px;
+    justify-content:space-between;
+    position:fixed;
+    width:100%;
+    top:0;
+`
+
+export const HeaderRight = styled.div`
+    display:flex;
     align-items:center;
 `
 
-export const Logo = styled(Link)`
-    margin-top:32px;
-    margin-bottom:48px;
-    & img {
-        width:92px;
-    }
+export const Logout = styled.div`
+    font-size:20px;
+    padding:8px 16px;
+    cursor:pointer;
 `
 
-export const WalletContainer = styled.div`
-    position:relative;
-    width:100%;
-`
 
 export const Wallet = styled.div<{expanded?:string}>`
     display:flex;
     align-items:center;
     justify-content:space-between;
     background-color: ${color.white};
-    width:100%;
+    width:fit-content;
+    max-width:70%;
+    min-width:50%;
     border-radius:16px;
     padding:8px 16px;
     cursor:pointer;
@@ -73,50 +71,12 @@ export const WalletLeft = styled.div`
 
 `
 
-export const WalletTop = styled.div`
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    cursor:pointer;
-`
-
-export const CloudWallet = styled.div`
-    margin-top:16px;
-`
-
-export const Balance = styled.div`
-    background-color: ${color.primary};
-    color: ${color.white};
-    padding:8px 16px;
-    border-radius:8px;
-`
-
-export const CloudWalletActions = styled.div`
-    background-color: ${color.lighterGray};
-    border-radius:8px;
-    padding:8px;
-    margin-top:16px;
-`
-
-export const CloudWalletAction = styled.div`
-    background-color: ${color.white};
-    border-radius:8px;
-    padding:8px 16px;
-
-    &:not(:last-child) {
-        margin-bottom:8px;
-    }
-    color: ${color.darkerGray};
-
-    cursor:pointer;
-    &:hover {
-        background-color: ${Hex2Rgba(color.primary, 0.1)};
-    }
-`
 
 export const Address = styled.div`
     color: ${color.black};
     font-weight:600;
+    font-size:15px;
+    padding-right:8px;
 `
 
 export const PubKey = styled.div`
@@ -129,9 +89,6 @@ export const WalletRight = styled.div`
     font-size:18px;
 `
 
-export const Lower = styled.div`
-    padding:16px;
-`
 
 export const Action = styled.div`
     cursor:pointer;
@@ -142,9 +99,8 @@ export const Action = styled.div`
         width:24px;
         height:24px;
         color: ${color.white};
-        margin-left:8px;
     }
-    padding:8px 16px;
+    padding:12px;
     border-radius:48px;
     display:flex;
     align-items:center;
@@ -158,15 +114,18 @@ export const Action = styled.div`
 `
 
 export const Menu = styled.div`
-    margin-top:24px;
+    margin-top:16px;
+    display:flex;
+    padding:0 16px;
 `
 
 export const MenuItem = styled.div<{active?:string}>`
     display:flex;
     align-items:center;
-    padding:12px 16px;
+    padding:8px 12px;
     border-radius:16px;
-    font-size:18px;
+    font-size:14px;
+    flex:1;
     cursor:pointer;
     background-color: ${color.lighterGray};
     color: ${color.darkerGray};
@@ -188,36 +147,8 @@ export const MenuItem = styled.div<{active?:string}>`
         margin-right:8px;
     }
 
-    margin-bottom:16px;
-
-`
-
-export const Header = styled.div`
-    flex:1;
-`
-
-export const Footer = styled.div`
-    padding:16px;
-`
-
-export const Logout = styled.div`
-    background-color: ${color.lighterGray};
-    color: ${color.gray};
-    font-size:14px;
-    align-items:center;
-    justify-content:center;
-    display:flex;
-    padding:8px 16px;
-    border-radius:16px;
-    cursor:pointer;
-    &:hover {
-        background-color: ${color.lighterMain};
-        color: ${color.primary};
+    &:not(:last-child) {
+        margin-right:8px;
     }
 
-    & svg {
-        width:24px;
-        height:24px;
-        margin-left:8px;
-    }
 `

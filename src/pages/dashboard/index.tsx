@@ -63,8 +63,7 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-        if (connected && publicKey && currentWallet && publicKey.toBase58() !== currentWallet)
-        {
+        if (connected && publicKey && currentWallet && publicKey.toBase58() !== currentWallet) {
             navigate("/login")
 
         }
@@ -156,7 +155,7 @@ const Dashboard = () => {
     }
 
     const toMailCreateAccount = () => {
-       setMailSection("create")
+        setMailSection("create")
     }
 
     const toMailDefault = () => {
@@ -344,7 +343,7 @@ const Dashboard = () => {
         })
     }
 
-    const launch = async (account:any) => {
+    const launch = async (account: any) => {
 
         let pk = account.publicKey
         let address = account.address
@@ -385,7 +384,7 @@ const Dashboard = () => {
                 <Container>
                     <C.Logo to="/">
                         <img src="/logo.png" alt="logo" />
-                    </C.Logo> 
+                    </C.Logo>
 
                     <C.Nav>
                         <C.NavItema href="">
@@ -508,7 +507,7 @@ const Dashboard = () => {
                                         create for me
                                     </C.CreateAccountBodySwitchItem>
                                     <C.CreateAccountBodySwitchItem onClick={() => switchCreateAccountTab("forother")} active={createAccountTab === "forother" ? "true" : "false"} >
-                                        create for someone else
+                                        create for someone
                                     </C.CreateAccountBodySwitchItem>
                                 </C.CreateAccountBodySwitch>
 
@@ -544,7 +543,7 @@ const Dashboard = () => {
                                 <C.CreateAccountBodySubmit onClick={registerMailAccount} disabled={mailAccountRegisterLoading}>
                                     {createAccountTab === "forme" ? "Create Account" : "Create Account for someone else"}
                                 </C.CreateAccountBodySubmit>
-                                
+
                                 <C.AirdropSol onClick={requestAirdropSol}>
                                     Airdrop devnet SOL
                                 </C.AirdropSol>
@@ -577,6 +576,12 @@ const Dashboard = () => {
                             ))}
 
                         </C.MyDomainsList>
+                    )}
+
+                    {myDomainsLoading && (
+                        <C.MyAccountsLoading>
+                            <FontAwesomeIcon icon={faSpinner} spin />
+                        </C.MyAccountsLoading>
                     )}
                 </C.MyDomains>
 
@@ -619,15 +624,23 @@ const Dashboard = () => {
                                     </C.DomainLowerLeftPrice>
                                 )}
                             </C.DomainLowerLeft>
+
+                            <C.DomainStatusMobile>
+                                <C.DomainStatus active={domainAvailable ? "true" : "false"}></C.DomainStatus>
+                                <C.DomainStatusText>
+                                    {domainAvailable ? "Available" : "Not Available"}
+                                </C.DomainStatusText>
+                            </C.DomainStatusMobile>
+
                             <C.DomainLowerRight>
                                 {domainAvailable && (
                                     <>
-                                    <C.DomainBuyButton onClick={domainBuy}>
-                                        Buy Now
-                                    </C.DomainBuyButton>
-                                    <a href="https://usdcfaucet.com/" target="_blank" rel="noreferrer">
-                                        Airdrop devnet USDC
-                                    </a>
+                                        <C.DomainBuyButton onClick={domainBuy}>
+                                            Buy Now
+                                        </C.DomainBuyButton>
+                                        <a href="https://usdcfaucet.com/" target="_blank" rel="noreferrer">
+                                            Airdrop devnet USDC
+                                        </a>
                                     </>
                                 )}
                             </C.DomainLowerRight>

@@ -3,6 +3,7 @@ import DepositPopup from "./deposit"
 import WithdrawPopup from "./withdraw";
 import CustomDomain from "./customDomain";
 import MailAccountRequests from "./mailAccountRequests";
+import VwalletPopup from "./vwallet";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useSelector } from "react-redux";
 
@@ -18,10 +19,12 @@ const Popups = () => {
 
     return (
         <>
+            <VwalletPopup/>
             <SendPopup/>
             <DepositPopup/>
             <WithdrawPopup/>
             <CustomDomain/>
+            
             <MailAccountRequests/>
         </>
     );

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import styled, { keyframes } from "styled-components"
 import { Container } from "styles"
+import { deviceMax } from "styles/media"
 import { color } from "styles/theme"
 import { Hex2Rgba } from "utils/helpers"
 
@@ -45,6 +46,10 @@ export const NavItema = styled.a`
 
     &:hover {
         color: ${color.primary};
+    }
+
+    @media ${deviceMax.md} {
+        display:none;
     }
 `
 
@@ -147,6 +152,10 @@ export const MyAccounts = styled.div`
     background-size: cover;
     background-repeat: repeat;
     border-radius: 16px;
+
+    @media ${deviceMax.md} {
+        padding:16px;
+    }
 `
 
 export const MyAccountsHeader = styled.div`
@@ -155,6 +164,10 @@ export const MyAccountsHeader = styled.div`
     justify-content:space-between;
     padding-bottom:24px;
     border-bottom: 1px solid ${color.primary};
+
+    @media ${deviceMax.md} {
+        padding-bottom:16px;
+    }
 `
 
 export const MyAccountsHeaderTitle = styled.div`
@@ -163,6 +176,10 @@ export const MyAccountsHeaderTitle = styled.div`
 
     & span {
         color: ${color.primary};
+    }
+
+    @media ${deviceMax.md} {
+        font-size:16px;
     }
 `
 
@@ -232,6 +249,10 @@ export const MyAccountsHeaderAction = styled.div`
         background: ${color.darkerGray};
         color: ${color.white};
     }
+
+    @media ${deviceMax.md} {
+        padding:8px 12px;
+    }
 `
 
 export const MyAccountsNone = styled.div`
@@ -299,6 +320,10 @@ export const MyAccountsLoading = styled.div`
 export const MyAccountsList = styled.div`
 
     margin-top:24px;
+
+    @media ${deviceMax.md} {
+        margin-top:16px;
+    }
     
     
 `
@@ -319,6 +344,10 @@ export const MyAccountsListItemAddress = styled.div`
     color: ${color.darkerGray};
     font-size:18px;
     font-weight:500;
+
+    @media ${deviceMax.md} {
+        font-size:14px;
+    }
 `
 
 export const MyAccountsListItemAction = styled.div`
@@ -343,6 +372,11 @@ export const MyAccountsListItemAction = styled.div`
         background: linear-gradient(87.12deg, #3166DF 0%, #004EFF 100%);
         box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
     }
+
+    @media ${deviceMax.md} {
+        padding:8px 12px;
+        font-size:14px;
+    }
 `
 
 export const CreateAccount = styled.div`
@@ -352,6 +386,10 @@ export const CreateAccount = styled.div`
     background-size: cover;
     background-repeat: repeat;
     border-radius: 16px;
+
+    @media ${deviceMax.md} {
+        padding:16px;
+    }
 `
 
 export const CreateAccountHeader = styled.div`
@@ -361,6 +399,10 @@ export const CreateAccountHeader = styled.div`
     justify-content:center;
     padding-bottom:24px;
     border-bottom: 1px solid ${color.primary};
+
+    @media ${deviceMax.md} {
+        padding-bottom:16px;
+    }
 `
 
 export const CreateAccountHeaderTitle = styled.div`
@@ -369,6 +411,10 @@ export const CreateAccountHeaderTitle = styled.div`
 
     & span {
         color: ${color.primary};
+    }
+
+    @media ${deviceMax.md} {
+        font-size:16px;
     }
 `
 
@@ -398,6 +444,10 @@ export const CreateAccountBodyInner = styled.div`
     max-width:674px;
     width:100%;
     padding:48px 24px;
+
+    @media ${deviceMax.md} {
+        padding:8px;
+    }
 `
 
 export const CreateAccountBodySwitch = styled.div`
@@ -541,6 +591,10 @@ export const MyDomains = styled.div`
     margin-top:32px;
     border-radius:16px;
     padding:32px;
+
+    @media ${deviceMax.md} {
+        padding:16px;
+    }
 `
 
 export const MyDomainsHeader = styled.div`
@@ -555,12 +609,21 @@ export const MyDomainsHeaderTitle = styled.div`
     & span {
         color: ${color.primary};
     }
+
+    @media ${deviceMax.md} {
+        font-size:16px;
+    }
 `
 
 export const MyDomainsList = styled.div`
     border-top: 1px solid ${color.primary};
     padding-top:24px;
     margin-top:24px;
+
+    @media ${deviceMax.md} {
+        padding-top:16px;
+        margin-top:16px;
+    }
 `
 
 export const MyDomainsListItem = styled.div`
@@ -579,6 +642,10 @@ export const MyDomainsListItemAddress = styled.div`
     color: ${color.darkerGray};
     font-size:18px;
     font-weight:500;
+
+    @media ${deviceMax.md} {
+        font-size:14px;
+    }
 `
 
 export const MyDomainsListItemAction = styled.div`
@@ -603,6 +670,11 @@ export const MyDomainsListItemAction = styled.div`
         background: linear-gradient(87.12deg, #3166DF 0%, #004EFF 100%);
         box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
     }
+
+    @media ${deviceMax.md} {
+        padding:8px 12px;
+        font-size:14px;
+    }
 `
 
 
@@ -612,10 +684,18 @@ export const Domain = styled.div`
     border-radius:16px;
     padding:32px;
     margin-bottom:40px;
+
+    @media ${deviceMax.md} {
+        padding:16px;
+    }
 `
 
 export const DomainUpper = styled.div`
     display:flex;
+
+    @media ${deviceMax.md} {
+        flex-direction:column;
+    }
 `
 
 export const DomainUpperLeft = styled.div`
@@ -628,6 +708,10 @@ export const DomainTitle = styled.div`
 
     & span {
         color: ${color.primary};
+    }
+
+    @media ${deviceMax.md} {
+        font-size:16px;
     }
 `
 
@@ -707,22 +791,38 @@ export const DomainLower = styled.div`
     border-radius:16px;
     padding:24px;
     margin-top:32px;
+
+    @media ${deviceMax.md} {
+        flex-direction:column;
+        padding:16px;
+    }
 `
 
 export const DomainLowerLeft = styled.div`
     flex:1;
+
 `
 
 export const DomainLowerLeftInfo = styled.div`
     display:flex;
     align-items:center;
+
+    @media ${deviceMax.md} {
+        justify-content:center;
+    }
 `
 
 export const DomainLowerLeftTitle = styled.div`
     font-weight:500;
     font-size:24px;
     margin-right:16px;
+
+    @media ${deviceMax.md} {
+        margin-right:8px;
+    }
 `
+
+
 
 export const DomainStatus = styled.div<{active?:string}>`
 
@@ -732,12 +832,36 @@ export const DomainStatus = styled.div<{active?:string}>`
     background: ${props => props.active === 'true' ? "#2FB444": color.danger};
     margin-right:8px;
 
+    @media ${deviceMax.md} {
+        display:none;
+    }
+
 `
 
 export const DomainStatusText = styled.div`
     font-size:14px;
     color: ${color.darkerGray};
     font-weight:500;
+
+    @media ${deviceMax.md} {
+        display:none;
+    }
+`
+
+export const DomainStatusMobile = styled.div`
+    display:none;
+    @media ${deviceMax.md} {
+        display:flex;
+        align-items:center;
+        ${DomainStatusText} {
+            display:block;
+        }
+
+        ${DomainStatus} {
+            display:block;
+        }
+    }
+
 `
 
 export const DomainLowerLeftPrice = styled.div`
@@ -759,6 +883,18 @@ export const DomainLowerRight = styled.div`
 
         &:hover {
             text-decoration:underline;
+        }
+        
+    }
+
+    @media ${deviceMax.md} {
+        width:100%;
+        
+        & a{
+            margin-top:8px;
+            text-align:center;
+            align-self:center;
+            font-size:14px;
         }
     }
 `
@@ -785,6 +921,11 @@ export const DomainBuyButton = styled.div`
     &:hover {
         background: linear-gradient(87.12deg, #3166DF 0%, #004EFF 100%);
         box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
+    }
+
+    @media ${deviceMax.md} {
+        width:100%;
+        margin-top:16px;
     }
 `
 

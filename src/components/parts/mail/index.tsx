@@ -142,7 +142,7 @@ const Mail = () => {
     }
 
     return (
-        <C.Mail>
+        <C.Mail viewingMail={currentMail !== null ? "true" : "false"}>
             <C.Upper>
                 <C.UpperHead>
                     <C.Title>

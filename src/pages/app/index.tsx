@@ -10,6 +10,9 @@ import Mail from "components/parts/mail";
 import EmptyMailContent from "components/parts/mailContent/empty";
 import MessageMailContent from "components/parts/mailContent/message";
 import { useNavigate } from "react-router-dom";
+import useWindowDimensions from "hooks/useWindowDimensions";
+import SidebarMobile from "components/mobile/sidebar";
+import { showVwalletPopup } from "services/slices/popup";
 
 const AppHome = () => {
 
@@ -20,6 +23,8 @@ const AppHome = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const { windowHeight, windowWidth } = useWindowDimensions()
+
     useEffect(() => {
         if (!connected || !cloudWallet || !mailAccount){
             navigate("/login")
@@ -27,6 +32,10 @@ const AppHome = () => {
             refreshBalance()
         }
     }, [connected, cloudWallet, mailAccount])
+
+    useEffect(() => {
+        dispatch(showVwalletPopup(false))
+    }, [])
 
 
     const refreshBalance = async () => {
@@ -39,8 +48,7 @@ const AppHome = () => {
 
     return (
         <C.Home>
-
-            <Sidebar/>
+            {windowWidth > 768 ? <Sidebar/> : <SidebarMobile/>}
             <Mail/>
             {currentMail !== null ? <MessageMailContent/> : <EmptyMailContent/>}
 

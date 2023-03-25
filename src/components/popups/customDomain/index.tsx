@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { getMyDomains } from "services/solana/mxns";
 import { uint8ArrayToText } from "utils/helpers";
 import { setCreateForSomeone, setCustomDomain } from "services/slices/data";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export const CustomDomain = () => {
 
@@ -24,6 +25,10 @@ export const CustomDomain = () => {
 
         if (show)
             loadDomains()
+
+        return () => {
+            setMyDomains([])
+        }
 
     }, [show])
 
@@ -88,9 +93,11 @@ export const CustomDomain = () => {
                     Use your own domain
                 </P.Title>
 
-                {myDomainsLoading && <P.Loading>
-                    <FontAwesomeIcon icon="spinner" spin />    
-                </P.Loading>}
+                {myDomainsLoading && (
+                    <P.Loading>
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                    </P.Loading>
+                )}
 
                 <P.MyDomainsList>
                     {myDomains.map((domain: any, i: number) => (

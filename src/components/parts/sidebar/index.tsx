@@ -29,7 +29,7 @@ const Sidebar = () => {
         <C.Sidebar>
             <C.Header>
                 <C.Upper>
-                    <C.Logo>
+                    <C.Logo to={"/dashboard"}>
                         <img src="/logo.png" alt="logo" />
                     </C.Logo>
 

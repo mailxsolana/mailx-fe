@@ -1,14 +1,23 @@
 import styled from "styled-components"
+import { deviceMax } from "styles/media"
 import { color } from "styles/theme"
 import { Hex2Rgba } from "utils/helpers"
 
-export const Mail = styled.div`
+export const Mail = styled.div<{viewingMail?:string}>`
     width:466px;
     height:100%;
     display:flex;
     flex-direction:column;
     min-height:100vh;
     border-right:1px solid ${color.lighterGray};
+
+    @media ${deviceMax.md} {
+        width:100%;
+
+        ${props => props.viewingMail === "true" && `
+            display:none;
+        `}
+    }
     
 `	
 
@@ -17,6 +26,10 @@ export const Upper = styled.div`
     padding-right:24px;
     border-bottom:1px solid ${color.lighterGray};
     height:201px;
+
+    @media ${deviceMax.md} {
+        height:unset;
+    }
 `
 
 export const Title = styled.div`
@@ -28,6 +41,11 @@ export const Title = styled.div`
 export const Description = styled.div`
     color: ${color.darkerGray};
     margin-bottom:16px;
+
+    @media ${deviceMax.md} {
+        margin-bottom:8px;
+        font-size:14px;
+    }
 `
 
 export const Search = styled.div`
@@ -54,6 +72,12 @@ export const Search = styled.div`
         }
     }
 
+    @media ${deviceMax.md} {
+        & input {
+            margin-top:4px;
+        }
+    }
+
 `
 
 export const MailList = styled.div`
@@ -77,6 +101,11 @@ export const MailList = styled.div`
 
     &:hover::-webkit-scrollbar-thumb {
         background:${color.gray};
+    }
+
+    @media ${deviceMax.md} {
+        overflow-y:unset;
+        max-height:unset;
     }
 `
 
@@ -131,6 +160,10 @@ export const UpperHead = styled.div`
     justify-content:space-between;
     align-items:center;
     margin-top:40px;
+
+    @media ${deviceMax.md} {
+        margin-top:16px;
+    }
 `
 
 export const Refresh = styled.div`
