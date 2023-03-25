@@ -1,11 +1,12 @@
 import styled from "styled-components"
+import { deviceMax, deviceMin } from "styles/media"
 import { color } from "styles/theme"
 import { Hex2Rgba } from "utils/helpers"
 import { Dialog, DialogHeader } from "../base/style"
 
 export const Popup = styled.div`
     & ${Dialog} {
-        width: 550px;
+        width: 770px;
         padding:0px;
         margin-left:16px;
         margin-right:16px;
@@ -16,6 +17,10 @@ export const Popup = styled.div`
 
     & ${DialogHeader} {
         display:none;
+    }
+
+    @media ${deviceMin.md} {
+        display: none !important;
     }
 `
 
