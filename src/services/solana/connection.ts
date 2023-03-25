@@ -5,6 +5,7 @@ import { sleep } from "utils/helpers";
 
 const SESSION_HASH = 'MAILXx' + Math.ceil(Math.random() * 1e9)
 export const SOLANA_CONNECTION = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
+export const SOLANA_CONNECTION_DEVNET = new Connection("https://api.devnet.solana.com", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SOLANA_CONNECTION_FINALIZED = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
 //export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc.helius.xyz/?api-key=3929efa1-32e5-4164-ba40-f1d6c115f2c5", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
@@ -52,7 +53,7 @@ export const WaitForTransaction = (signature: string) => new Promise(async (reso
 export const airdropSol = async (publicKey: PublicKey, amount: number) => {
     let loading = toast.loading("Airdropping...")
     try {
-        await SOLANA_CONNECTION.requestAirdrop(publicKey, amount * 1000000000)
+        await SOLANA_CONNECTION_DEVNET.requestAirdrop(publicKey, amount * 1000000000)
         toast.success("Airdrop Successful")
         toast.dismiss(loading)
     } catch (e) {
