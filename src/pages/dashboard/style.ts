@@ -262,6 +262,10 @@ export const MyAccountsNone = styled.div`
     padding:24px;
     background-color:${color.white};
     border-radius:16px;
+
+    @media ${deviceMax.md} {
+        flex-direction:column;
+    }
 `
 
 export const MyAccountsNoneIcon = styled.div`
