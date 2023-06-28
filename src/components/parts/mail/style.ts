@@ -11,6 +11,14 @@ export const Mail = styled.div<{viewingMail?:string}>`
     min-height:100vh;
     border-right:1px solid ${color.lighterGray};
 
+    @media ${deviceMax.xl} {
+        width:400px;
+    }
+
+    @media ${deviceMax.lg} {
+        width:300px;
+    }
+
     @media ${deviceMax.md} {
         width:100%;
 

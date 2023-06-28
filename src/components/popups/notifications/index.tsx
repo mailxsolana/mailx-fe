@@ -48,9 +48,6 @@ export const Notifications = () => {
                             mail = findSent
                         }
 
-                        console.log(inboxMails)
-                        console.log(sentMails)
-
                         return {
                             title: "Mail Deletion Request",
                             description: `${bufferToText(pdasParsed[i].address)}@${bufferToText(pdasParsed[i].domain)} wants to delete "${bufferToText(r.subject)}" mail`,

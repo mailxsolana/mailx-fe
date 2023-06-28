@@ -86,6 +86,15 @@ export const UpperRight = styled.div`
     & > *:not(:last-child) {
         margin-right:16px;
     }
+
+    @media ${deviceMax.md} {
+        flex-direction:column;
+        align-items:flex-end;
+        & > *:not(:last-child) {
+            margin-right:0;
+            margin-bottom:4px;
+        }
+    }
 `
 
 export const Tpp = styled.div`
@@ -174,11 +183,25 @@ export const TppNotification = styled.div`
     justify-content:space-between;
     background:${color.lighterGray};
     border-radius:16px;
+
+    @media ${deviceMax.xxxl} {
+        flex-direction:column;
+    }
 `
 
 export const TppNotificationLeft = styled.div`
     display:flex;
     align-items:center;
+
+    @media ${deviceMax.xxxl} {
+        margin-bottom:16px;
+    }
+
+    @media ${deviceMax.xl} {
+        flex-direction:column;
+        text-align:center;
+        justify-content:center;
+    }
 `
 
 export const TppNotificationIcon = styled.div`
@@ -192,6 +215,11 @@ export const TppNotificationIcon = styled.div`
     margin-right:24px;
     color:${color.danger};
     font-size:24px;
+
+    @media ${deviceMax.xl} {
+        margin-right:0;
+        margin-bottom:8px;
+    }
 `
 
 export const TppNotificationContent = styled.div`

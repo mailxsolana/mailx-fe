@@ -11,6 +11,10 @@ export const Sidebar = styled.div`
     flex-direction:column;
     min-height:100vh;
     border-right:1px solid ${color.lighterGray};
+
+    @media ${deviceMax.lg} {
+        width:200px;
+    }
 `
 
 export const Upper = styled.div`
