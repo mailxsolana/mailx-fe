@@ -1,11 +1,11 @@
-import { faBars, faCaretDown, faChevronDown, faChevronUp, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBell, faCaretDown, faChevronDown, faChevronUp, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCurrentMail, setMailPage } from "services/slices/data";
-import { showDepositPopup, showSendPopup, showVwalletPopup, showWithdrawPopup } from "services/slices/popup";
+import { showDepositPopup, showNotificationsPopup, showSendPopup, showVwalletPopup, showWithdrawPopup } from "services/slices/popup";
 import { shortenPublicKey } from "utils/helpers";
 import { IconInbox, IconLogout, IconNewMail, IconSent } from "utils/icons";
 import * as C from "./style";
@@ -20,6 +20,7 @@ const SidebarMobile = () => {
     const mailPage = useSelector((state: any) => state.data.mailPage)
     const navigate = useNavigate()
     const currentMail = useSelector((state: any) => state.data.currentMail)
+    const mailDeletionRequests = useSelector((state: any) => state.data.mailDeletionRequests)
 
     const newMail = () => {
         dispatch(showSendPopup(true))
@@ -43,6 +44,10 @@ const SidebarMobile = () => {
                 </C.Wallet>
 
                 <C.HeaderRight>
+                    <C.Action onClick={() => dispatch(showNotificationsPopup(true))}>
+                        <FontAwesomeIcon icon={faBell} />
+                        <C.NotificationCount>{mailDeletionRequests.length}</C.NotificationCount>
+                    </C.Action>
                     <C.Action onClick={newMail}>
                         <IconNewMail />
                     </C.Action>

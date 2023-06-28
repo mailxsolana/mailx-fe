@@ -28,7 +28,7 @@ const SendPopup = () => {
     const [subject, setSubject] = React.useState("")
     const [to, setTo] = React.useState("")
     const [loading, setLoading] = React.useState(false)
-    const [tpp, setTpp] = React.useState(false)
+    const [tpp, setTpp] = React.useState(true)
     const cloudWallet = useSelector((state: any) => state.data.cloudWallet)
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
     const dispatch = useDispatch()
@@ -101,7 +101,7 @@ const SendPopup = () => {
                                 <span>2PP Mail</span>
                                 <Switch height={24} width={44} uncheckedIcon={false} onColor={color.primary} checkedIcon={false} onChange={ontppChange} checked={tpp} />
                             </label>
-                            <P.TPPInfo>
+                            <P.TPPInfo data-tooltip-id="tpp-tooltip" data-tooltip-place="top">
                                 <FontAwesomeIcon icon={faInfoCircle} />
                             </P.TPPInfo>
                         </P.TPP>

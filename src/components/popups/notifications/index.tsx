@@ -3,7 +3,7 @@ import { showNotificationsPopup } from "services/slices/popup";
 import * as P from "./style"
 import BasePopup from "components/popups/base"
 import { useWallet } from "@solana/wallet-adapter-react";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { loadMails, pdasToEmailAddresses } from "services/solana/mail";
@@ -22,10 +22,13 @@ export const Notifications = () => {
 
     const inboxMails = useSelector((state: any) => state.data.inboxMails)
     const sentMails = useSelector((state: any) => state.data.sentMails)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const [notifications, setNotifications] = useState<any>([])
 
     useEffect(() => {
+
+        setLoading(true)
 
         if (mailDeletionRequests.length > 0 && show) {
 
@@ -44,23 +47,32 @@ export const Notifications = () => {
                         else if (findSent){
                             mail = findSent
                         }
+
+                        console.log(inboxMails)
+                        console.log(sentMails)
+
                         return {
                             title: "Mail Deletion Request",
                             description: `${bufferToText(pdasParsed[i].address)}@${bufferToText(pdasParsed[i].domain)} wants to delete "${bufferToText(r.subject)}" mail`,
                             mail
                         }
                     }))
+
+                    setLoading(false)
                 }).catch((err: any) => {
                     console.log(err)
                     toast.error("Error loading notifications")
+                    setLoading(false)
                 })
             }).catch((err: any) => {
                 console.log(err)
                 toast.error("Error loading notifications")
+                setLoading(false)
             })
 
         } else {
             setNotifications([])
+            setLoading(false)
         }
 
     }, [mailDeletionRequests, show])
@@ -73,6 +85,18 @@ export const Notifications = () => {
     return (
         <P.Popup>
             <BasePopup title="Notifications" icon={<FontAwesomeIcon icon={faBell} />} show={show} hide={() => showNotificationsPopup(false)} >
+
+                {loading && (
+                    <P.Loading>
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                    </P.Loading>
+                )}
+
+                {!loading && notifications.length === 0 && (
+                    <P.NoNotifications>
+                        No notifications
+                    </P.NoNotifications>
+                )}
 
                 {notifications.map((r: any, i: number) => {
                     return (

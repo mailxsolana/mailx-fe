@@ -111,8 +111,28 @@ export const Action = styled.div`
         background: linear-gradient(87.12deg, #3166DF 0%, #004EFF 100%);
         box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
     }
+
+    &:not(:last-child) {
+        margin-right:8px;
+    }
+    position:relative;
 `
 
+export const NotificationCount = styled.div`
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    background-color: ${color.white};
+    color: ${color.primary};
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
+`
 export const Menu = styled.div`
     margin-top:16px;
     display:flex;

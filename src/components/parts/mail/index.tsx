@@ -28,6 +28,7 @@ const Mail = () => {
         dispatch(setMailDeletionRequests([]))
         dispatch(setInboxMails([]))
         dispatch(setSentMails([]))
+        loadSent(false)
     }, [])
 
     useEffect(() => {
@@ -61,8 +62,8 @@ const Mail = () => {
     }, [shouldRefreshSent])
 
     const loadInbox = async () => {
-        if (mailPage !== "inbox")
-            return;
+        /*if (mailPage !== "inbox")
+            return;*/
         setRefreshing(true)
         getInbox(cwallet, `${mailAccount.address}@${mailAccount.domain}`).then((res: any) => {
 
@@ -106,9 +107,10 @@ const Mail = () => {
         })
     }
 
-    const loadSent = async () => {
+    const loadSent = async (place:boolean=true) => {
+        /*console.log("load sent")
         if (mailPage !== "sent")
-            return;
+            return;*/
         setRefreshing(true)
         getSent(cwallet, `${mailAccount.address}@${mailAccount.domain}`).then((res: any) => {
 
@@ -137,6 +139,7 @@ const Mail = () => {
                     return b.time - a.time
                 })
 
+                if (place)
                 setMails(parsed)
                 dispatch(setSentMails(parsed))
 

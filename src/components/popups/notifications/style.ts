@@ -57,3 +57,19 @@ export const NotificationDate = styled.div`
     white-space: nowrap;
     margin-left: 4px;
 `
+
+export const Loading = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${color.primary};
+    font-size: 24px;
+    margin:24px 0;
+`
+
+export const NoNotifications = styled.div`
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: ${color.primary};
+`

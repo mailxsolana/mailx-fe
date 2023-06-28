@@ -8,6 +8,7 @@ import App from "./app";
 import { store } from "./services/store";
 import Popups from "components/popups";
 import { LightboxProvider } from "hooks/lightbox";
+import { Tooltip } from 'react-tooltip'
 
 export default function router() {
 
@@ -32,6 +33,8 @@ export default function router() {
                                 },
                             }}
                         />
+
+                        <Tooltip id="tpp-tooltip" html="2PP Mail enables both the sender<br/>and the receiver to collaboratively delete the mail,<br/>given that they both consent to the deletion"  />
                     </LightboxProvider>
                 </BrowserRouter>
             </Wallet>
