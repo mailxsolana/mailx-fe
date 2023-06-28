@@ -22,11 +22,50 @@ export const Upper = styled.div`
 `
 
 export const Logo = styled(Link)`
-    margin-top:32px;
-    margin-bottom:48px;
     & img {
         width:92px;
     }
+`
+
+
+export const Top = styled.div`
+    display:flex;
+    margin-top:32px;
+    margin-bottom:48px;
+    justify-content:space-between;
+    width:100%;
+`
+export const Notifications = styled.div`
+    background-color: ${color.primary};
+    color: ${color.white};
+    width:40px;
+    height:27px;
+    border-radius:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+
+    &:hover {
+        background-color: ${Hex2Rgba(color.primary, 0.8)};
+    }
+    position:relative;
+`
+
+export const NotificationCount = styled.div`
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    background-color: ${color.white};
+    color: ${color.primary};
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
 `
 
 export const WalletContainer = styled.div`

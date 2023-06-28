@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
-import { setCurrentMail, setRefreshInbox, setRefreshSent } from "services/slices/data"
-import { getInbox, getSent, pdasToEmailAddresses } from "services/solana/mail"
+import { setCurrentMail, setInboxMails, setMailDeletionRequests, setRefreshInbox, setRefreshSent, setSentMails } from "services/slices/data"
+import { getInbox, getSent, loadMailDeletionRequests, pdasToEmailAddresses } from "services/solana/mail"
 import { bufferToText, limitString, removeHtmlTags, serializeUint8Array } from "utils/helpers"
 import * as C from "./style"
 import moment from "moment"
@@ -25,6 +25,12 @@ const Mail = () => {
     const [refreshing, setRefreshing] = useState<any>(false)
 
     useEffect(() => {
+        dispatch(setMailDeletionRequests([]))
+        dispatch(setInboxMails([]))
+        dispatch(setSentMails([]))
+    }, [])
+
+    useEffect(() => {
 
         if (mailPage === "inbox"){
             setMails([])
@@ -34,12 +40,15 @@ const Mail = () => {
             setMails([])
             loadSent()
         }
+
+        loadDeleteRequests()
     }, [mailPage])
 
     useEffect(() => {
         if (shouldRefreshInbox) {
             loadInbox()
             dispatch(setRefreshInbox(false))
+            loadDeleteRequests()
         }
     }, [shouldRefreshInbox])
 
@@ -47,6 +56,7 @@ const Mail = () => {
         if (shouldRefreshSent) {
             loadSent()
             dispatch(setRefreshSent(false))
+            loadDeleteRequests()
         }
     }, [shouldRefreshSent])
 
@@ -72,6 +82,7 @@ const Mail = () => {
                         timestamp: moment(r.account.timestamp.toNumber() * 1000).calendar(),
                         time:r.account.timestamp.toNumber() * 1000,
                         to: r.account.to.toString(),
+                        tpp: r.account.tpp === 1 ? true : false,
                         //date: new Date(r.account.date)
                     })
                 })
@@ -82,6 +93,7 @@ const Mail = () => {
                 })
 
                 setMails(parsed)
+                dispatch(setInboxMails(parsed))
 
 
             })
@@ -115,6 +127,7 @@ const Mail = () => {
                         timestamp: moment(r.account.timestamp.toNumber() * 1000).calendar(),
                         time:r.account.timestamp.toNumber() * 1000,
                         to: r.account.to.toString(),
+                        tpp: r.account.tpp === 1 ? true : false,
                         //date: new Date(r.account.date)
                     })
                 })
@@ -125,7 +138,7 @@ const Mail = () => {
                 })
 
                 setMails(parsed)
-
+                dispatch(setSentMails(parsed))
 
             })
 
@@ -134,6 +147,49 @@ const Mail = () => {
             toast.error("Error while fetching sent emails")
         }).finally(() => {
             setRefreshing(false)
+        })
+    }
+
+    const loadDeleteRequests = async () => {
+        loadMailDeletionRequests(cwallet, `${mailAccount.address}@${mailAccount.domain}`).then((res: any) => {
+            let parsed = res.map((y: any) => {
+                return {
+                    from: y.account.from.toString(),
+                    mail: y.account.mail.toString(),
+                }
+            })
+            dispatch(setMailDeletionRequests(parsed))
+
+            /*let indexesToMark:any = []
+
+            for (let i = 0; i < parsed.length; i++) {
+                let findMail = mails.find((m: any) => m.pk === parsed[i].mail)
+                if (findMail !== undefined) {
+                    let index = mails.indexOf(findMail)
+                    if (index !== -1) {
+                        indexesToMark.push(index)
+                    }
+                }
+            }
+
+            let newMails = mails.map((m: any, index: number) => {
+                if (indexesToMark.includes(index)) {
+                    return {
+                        ...m,
+                        deleteRequest: true
+                    }
+                }
+                else {
+                    return {
+                        ...m,
+                        deleteRequest: false
+                    }
+                }
+            })
+
+            console.log(newMails)
+
+            setMails([...newMails])*/
         })
     }
 

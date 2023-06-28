@@ -9,6 +9,7 @@ export interface PopupState {
     customDomainPopup: boolean,
     mailAccountRequestsPopup: boolean,
     vwalletPopup: boolean,
+    notificationsPopup: boolean,
 }
 
 const initialState: PopupState = {
@@ -19,6 +20,7 @@ const initialState: PopupState = {
     customDomainPopup: false,
     mailAccountRequestsPopup: false,
     vwalletPopup: false,
+    notificationsPopup: false,
 }
 
 export const popupSlice = createSlice({
@@ -46,9 +48,12 @@ export const popupSlice = createSlice({
         showVwalletPopup: (state, action: PayloadAction<boolean>) => {
             state.vwalletPopup = action.payload
         },
+        showNotificationsPopup: (state, action: PayloadAction<boolean>) => {
+            state.notificationsPopup = action.payload
+        }
     }
 })
 
-export const { showUnlockPopup, showVwalletPopup, showSendPopup, showDepositPopup, showWithdrawPopup,showCustomDomainPopup, showMailAccountRequestsPopup } = popupSlice.actions
+export const { showUnlockPopup, showVwalletPopup, showSendPopup, showDepositPopup, showWithdrawPopup,showCustomDomainPopup, showMailAccountRequestsPopup, showNotificationsPopup } = popupSlice.actions
 
 export default popupSlice.reducer

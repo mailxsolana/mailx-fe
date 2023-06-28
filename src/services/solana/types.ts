@@ -206,11 +206,135 @@ export type Mailx = {
           "type": "publicKey"
         },
         {
+          "name": "tpp",
+          "type": "u8"
+        },
+        {
           "name": "subject",
           "type": "bytes"
         },
         {
           "name": "body",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "createDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "acceptDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "rejectDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
           "type": "bytes"
         }
       ]
@@ -274,6 +398,10 @@ export type Mailx = {
             "type": "i64"
           },
           {
+            "name": "tpp",
+            "type": "u8"
+          },
+          {
             "name": "subject",
             "type": "bytes"
           },
@@ -284,6 +412,30 @@ export type Mailx = {
           {
             "name": "metadata",
             "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mailDeletionRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mail",
+            "type": "publicKey"
+          },
+          {
+            "name": "from",
+            "type": "publicKey"
+          },
+          {
+            "name": "to",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           }
         ]
       }
@@ -379,6 +531,10 @@ export type Mailx = {
     {
       "code": 6001,
       "name": "InvalidAddress"
+    },
+    {
+      "code": 6002,
+      "name": "TwoFactorDeletionEnabled"
     }
   ]
 };
@@ -591,11 +747,135 @@ export const IDL: Mailx = {
           "type": "publicKey"
         },
         {
+          "name": "tpp",
+          "type": "u8"
+        },
+        {
           "name": "subject",
           "type": "bytes"
         },
         {
           "name": "body",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "createDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "acceptDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "rejectDeleteMailRequest",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mailAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mail",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mailDeletionRequest",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "address",
+          "type": "bytes"
+        },
+        {
+          "name": "domain",
           "type": "bytes"
         }
       ]
@@ -659,6 +939,10 @@ export const IDL: Mailx = {
             "type": "i64"
           },
           {
+            "name": "tpp",
+            "type": "u8"
+          },
+          {
             "name": "subject",
             "type": "bytes"
           },
@@ -669,6 +953,30 @@ export const IDL: Mailx = {
           {
             "name": "metadata",
             "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mailDeletionRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mail",
+            "type": "publicKey"
+          },
+          {
+            "name": "from",
+            "type": "publicKey"
+          },
+          {
+            "name": "to",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           }
         ]
       }
@@ -764,6 +1072,10 @@ export const IDL: Mailx = {
     {
       "code": 6001,
       "name": "InvalidAddress"
+    },
+    {
+      "code": 6002,
+      "name": "TwoFactorDeletionEnabled"
     }
   ]
 };

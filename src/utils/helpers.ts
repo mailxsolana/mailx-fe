@@ -59,7 +59,7 @@ export const cwalletProvider = (cwallet: Keypair) => {
             tx.sign(cwallet)
 
             //send transaction
-            const sig = await SOLANA_CONNECTION_BUNDLR.sendRawTransaction(tx.serialize(), { skipPreflight: false, preflightCommitment: "finalized" });
+            const sig = await SOLANA_CONNECTION_BUNDLR.sendRawTransaction(tx.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
             return sig;
             
 

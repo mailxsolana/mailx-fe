@@ -15,10 +15,10 @@ import { balanceOf } from './cwallet'
 
 const systemProgram = anchor.web3.SystemProgram
 
-const programId = "CigDTeq8uMe4B7TrTVJpD1viFzkXgphw6Zx97gtMtBVM"
+const programId = "2WTXnFHx5ZujYaJpwbqnaaB2aqc1yn6m5rZqNdQUCu61"
 const MAIL_SIZE = 1024
 
-export const sendMail = async (cwallet: any, to: string, subject: string, body: string, authority: any) => {
+export const sendMail = async (cwallet: any, to: string, subject: string, body: string, tpp: any) => {
 
     if (body.trim().length == 0) {
         toast.error("Message body cannot be empty")
@@ -74,12 +74,11 @@ export const sendMail = async (cwallet: any, to: string, subject: string, body: 
 
         let sizeInBytes = new TextEncoder().encode(content).length;
 
-        const wlf = bs58.encode(Buffer.from(cwalletSigner.secretKey))
+        //const wlf = bs58.encode(Buffer.from(cwalletSigner.secretKey))
 
         const bundlr = new WebBundlr("https://devnet.bundlr.network", "solana", cwalletProvider(cwalletSigner), {
             providerUrl: "https://api.devnet.solana.com",
         });
-
 
         let arweaveTransactionId = ""
 
@@ -147,6 +146,7 @@ export const sendMail = async (cwallet: any, to: string, subject: string, body: 
             addressBuffer,
             domainBuffer,
             mailAccountPDA,
+            tpp ? 1 : 0,
             subjectbuffer,
             bodybuffer,
         ).accounts({
@@ -195,9 +195,6 @@ export const getInbox = async (cwallet: any, email: string) => {
 
     let pda = await emailToPDA(email, program.programId)
 
-    let all = await program.account.mail.all()
-
-
     let mails = await program.account.mail.all([
         {
             memcmp: {
@@ -220,9 +217,6 @@ export const getSent = async (cwallet: any, email: string) => {
     const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
 
     let pda = await emailToPDA(email, program.programId)
-
-    let all = await program.account.mail.all()
-
 
     let mails = await program.account.mail.all([
         {
@@ -283,7 +277,7 @@ export const deleteMail = async (cwallet: any, mail: any) => {
 
         try {
 
-            await sendAndConfirmTransaction(SOLANA_CONNECTION_FINALIZED, tx, [cwalletSigner], { skipPreflight: false, preflightCommitment: "finalized" })
+            await sendAndConfirmTransaction(SOLANA_CONNECTION, tx, [cwalletSigner], { skipPreflight: false, preflightCommitment: "confirmed" })
             toast.success("Mail deleted!")
             toast.dismiss(loading)
         } catch (e) {
@@ -301,4 +295,220 @@ export const deleteMail = async (cwallet: any, mail: any) => {
     }
 
     return true
+}
+
+export const createMailDeleteRequest = async (cwallet: any, mail: any) => {
+    let balance = await balanceOf(cwallet.publicKey)
+    if (balance === 0) {
+        toast.error("Insufficient funds please deposit some SOL")
+        return Promise.reject("fund")
+    }
+    let loading = toast.loading("Creating mail delete request...")
+
+    try {
+
+        const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+        const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+        const cwalletSigner = anchor.web3.Keypair.fromSecretKey(new Uint8Array(cwallet.secretKey))
+
+        let { addressBuffer, domainBuffer } = await emailToBuffer(`${store.getState().data.mailAccount.address}@${store.getState().data.mailAccount.domain}`, program.programId)
+
+        const [mailDeletionRequestAccount, _] = await anchor.web3.PublicKey.findProgramAddress(
+            [anchor.utils.bytes.utf8.encode('mail-tpp'), mail.toBuffer()],
+            new PublicKey(programId)
+        )
+
+        const tx = await program.methods.createDeleteMailRequest(
+            addressBuffer,
+            domainBuffer,
+        ).accounts({
+            authority: new PublicKey(cwallet.publicKey),
+            mail,
+            mailAccount: new PublicKey(store.getState().data.mailAccount.pk),
+            mailDeletionRequest: mailDeletionRequestAccount,
+        })
+            .transaction()
+
+        tx.recentBlockhash = (await SOLANA_CONNECTION.getLatestBlockhash("finalized")).blockhash;
+        tx.feePayer = new PublicKey(cwallet.publicKey)
+
+        try {
+
+            await sendAndConfirmTransaction(SOLANA_CONNECTION, tx, [cwalletSigner], { skipPreflight: false, preflightCommitment: "confirmed" })
+            toast.success("Mail delete request created!")
+            toast.dismiss(loading)
+        } catch (e) {
+            console.log(e)
+            toast.error("Error creating mail delete request")
+            toast.dismiss(loading)
+            return Promise.reject(e)
+        }
+
+    } catch (e) {
+        console.log(e)
+        toast.error("Error creating mail delete request")
+        toast.dismiss(loading)
+        return Promise.reject(e)
+    }
+}
+
+export const acceptMailDeleteRequest = async (cwallet: any, mail: any) => {
+    let balance = await balanceOf(cwallet.publicKey)
+    if (balance === 0) {
+        toast.error("Insufficient funds please deposit some SOL")
+        return Promise.reject("fund")
+    }
+    let loading = toast.loading("Deleting mail...")
+
+    try {
+
+        const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+        const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+        const cwalletSigner = anchor.web3.Keypair.fromSecretKey(new Uint8Array(cwallet.secretKey))
+
+        let { addressBuffer, domainBuffer } = await emailToBuffer(`${store.getState().data.mailAccount.address}@${store.getState().data.mailAccount.domain}`, program.programId)
+
+        const [mailDeletionRequestAccount, _] = await anchor.web3.PublicKey.findProgramAddress(
+            [anchor.utils.bytes.utf8.encode('mail-tpp'), mail.toBuffer()],
+            new PublicKey(programId)
+        )
+
+        const tx = await program.methods.acceptDeleteMailRequest(
+            addressBuffer,
+            domainBuffer,
+        ).accounts({
+            authority: new PublicKey(cwallet.publicKey),
+            mail,
+            mailAccount: new PublicKey(store.getState().data.mailAccount.pk),
+            mailDeletionRequest: mailDeletionRequestAccount,
+        })
+            .transaction()
+
+        tx.recentBlockhash = (await SOLANA_CONNECTION.getLatestBlockhash("finalized")).blockhash;
+        tx.feePayer = new PublicKey(cwallet.publicKey)
+
+        try {
+
+            await sendAndConfirmTransaction(SOLANA_CONNECTION, tx, [cwalletSigner], { skipPreflight: false, preflightCommitment: "confirmed" })
+            toast.success("Mail deleted!")
+            toast.dismiss(loading)
+        } catch (e) {
+            console.log(e)
+            toast.error("Error deleting mail")
+            toast.dismiss(loading)
+            return Promise.reject(e)
+        }
+
+    } catch (e) {
+        console.log(e)
+        toast.error("Error deleting mail")
+        toast.dismiss(loading)
+        return Promise.reject(e)
+    }
+}
+
+export const rejectMailDeleteRequest = async (cwallet: any, mail: any) => {
+    let balance = await balanceOf(cwallet.publicKey)
+    if (balance === 0) {
+        toast.error("Insufficient funds please deposit some SOL")
+        return Promise.reject("fund")
+    }
+    let loading = toast.loading("Rejecting mail delete request...")
+
+    try {
+
+        const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+        const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+        const cwalletSigner = anchor.web3.Keypair.fromSecretKey(new Uint8Array(cwallet.secretKey))
+
+        let { addressBuffer, domainBuffer } = await emailToBuffer(`${store.getState().data.mailAccount.address}@${store.getState().data.mailAccount.domain}`, program.programId)
+
+        const [mailDeletionRequestAccount, _] = await anchor.web3.PublicKey.findProgramAddress(
+            [anchor.utils.bytes.utf8.encode('mail-tpp'), mail.toBuffer()],
+            new PublicKey(programId)
+        )
+
+        const tx = await program.methods.rejectDeleteMailRequest(
+            addressBuffer,
+            domainBuffer,
+        ).accounts({
+            authority: new PublicKey(cwallet.publicKey),
+            mail,
+            mailAccount: new PublicKey(store.getState().data.mailAccount.pk),
+            mailDeletionRequest: mailDeletionRequestAccount,
+        })
+            .transaction()
+
+        tx.recentBlockhash = (await SOLANA_CONNECTION.getLatestBlockhash("finalized")).blockhash;
+        tx.feePayer = new PublicKey(cwallet.publicKey)
+
+        try {
+
+            await sendAndConfirmTransaction(SOLANA_CONNECTION, tx, [cwalletSigner], { skipPreflight: false, preflightCommitment: "confirmed" })
+            toast.success("Mail delete request rejected!")
+            toast.dismiss(loading)
+        } catch (e) {
+            console.log(e)
+            toast.error("Error rejecting mail delete request")
+            toast.dismiss(loading)
+            return Promise.reject(e)
+        }
+
+    } catch (e) {
+        console.log(e)
+        toast.error("Error rejecting mail delete request")
+        toast.dismiss(loading)
+        return Promise.reject(e)
+    }
+}
+
+export const loadMailDeletionRequests = async (cwallet: any, email: string) => {
+
+    const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+    const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+    let pda = await emailToPDA(email, program.programId)
+
+    let requests = await program.account.mailDeletionRequest.all([
+        {
+            memcmp: {
+                offset: 72,
+                bytes: pda.toBase58()
+            }
+        }
+    ])
+
+    return requests
+}
+
+export const loadRequestedMailDeletions = async (cwallet: any, email: string) => {
+
+    const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+    const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+    let pda = await emailToPDA(email, program.programId)
+
+    let requests = await program.account.mailDeletionRequest.all([
+        {
+            memcmp: {
+                offset: 40,
+                bytes: pda.toBase58()
+            }
+        }
+    ])
+
+    return requests
+
+}
+
+export const loadMails = async (cwallet: any, mails: any[]) => {
+    const anchorConnection = new anchor.AnchorProvider(SOLANA_CONNECTION, emptyAnchorWallet(new PublicKey(cwallet.publicKey)), anchor.AnchorProvider.defaultOptions())
+    const program = new anchor.Program(IDL as anchor.Idl, programId, anchorConnection)
+
+    const returnData = await program.account.mail.fetchMultiple(mails.map(mail => mail.mail))
+  
+    return returnData;
 }

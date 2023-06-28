@@ -12,4 +12,6 @@ export const color = {
     darkerGray: "#4B5563",
     danger: "#B42F2F",
     dangerLight: "#FFC8C8",
+    success: "#2FB484",
+    successLight: "#DDFFF3",
 }

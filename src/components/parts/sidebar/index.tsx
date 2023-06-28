@@ -1,11 +1,11 @@
-import { faCaretDown, faChevronDown, faChevronUp, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCaretDown, faChevronDown, faChevronUp, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCurrentMail, setMailPage } from "services/slices/data";
-import { showDepositPopup, showSendPopup, showWithdrawPopup } from "services/slices/popup";
+import { showDepositPopup, showNotificationsPopup, showSendPopup, showWithdrawPopup } from "services/slices/popup";
 import { shortenPublicKey } from "utils/helpers";
 import { IconInbox, IconLogout, IconNewMail, IconSent } from "utils/icons";
 import * as C from "./style";
@@ -19,6 +19,7 @@ const Sidebar = () => {
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
     const balance = useSelector((state: any) => state.data.balance)
     const mailPage = useSelector((state: any) => state.data.mailPage)
+    const mailDeletionRequests = useSelector((state: any) => state.data.mailDeletionRequests)
     const navigate = useNavigate()
 
     const newMail = () => {
@@ -29,9 +30,16 @@ const Sidebar = () => {
         <C.Sidebar>
             <C.Header>
                 <C.Upper>
-                    <C.Logo to={"/dashboard"}>
-                        <img src="/logo.png" alt="logo" />
-                    </C.Logo>
+                    <C.Top>
+                        <C.Logo to={"/dashboard"}>
+                            <img src="/logo.png" alt="logo" />
+                        </C.Logo>
+
+                        <C.Notifications onClick={() => dispatch(showNotificationsPopup(true))}>
+                            <FontAwesomeIcon icon={faBell} />
+                            <C.NotificationCount>{mailDeletionRequests.length}</C.NotificationCount>
+                        </C.Notifications>
+                    </C.Top>
 
                     <C.WalletContainer>
                         {!walletExpanded && (

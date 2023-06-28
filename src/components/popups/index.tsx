@@ -4,6 +4,7 @@ import WithdrawPopup from "./withdraw";
 import CustomDomain from "./customDomain";
 import MailAccountRequests from "./mailAccountRequests";
 import VwalletPopup from "./vwallet";
+import Notifications from "./notifications";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useSelector } from "react-redux";
 
@@ -24,6 +25,7 @@ const Popups = () => {
             <DepositPopup/>
             <WithdrawPopup/>
             <CustomDomain/>
+            <Notifications/>
             
             <MailAccountRequests/>
         </>

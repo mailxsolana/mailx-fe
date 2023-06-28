@@ -6,7 +6,7 @@ import BasePopup from "components/popups/base"
 
 import { showDepositPopup, showSendPopup } from "services/slices/popup"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBook, faLock } from "@fortawesome/free-solid-svg-icons"
+import { faBook, faInfoCircle, faLock } from "@fortawesome/free-solid-svg-icons"
 import { IconNewMail } from "utils/icons"
 //@ts-ignore
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -17,8 +17,8 @@ import { balanceOf } from "services/solana/cwallet"
 import { toast } from "react-hot-toast"
 import { sendMail } from "services/solana/mail"
 import { useWallet } from "@solana/wallet-adapter-react"
-//@ts-ignore
-
+import Switch from "react-switch";
+import { color } from "styles/theme"
 
 const SendPopup = () => {
 
@@ -28,6 +28,7 @@ const SendPopup = () => {
     const [subject, setSubject] = React.useState("")
     const [to, setTo] = React.useState("")
     const [loading, setLoading] = React.useState(false)
+    const [tpp, setTpp] = React.useState(false)
     const cloudWallet = useSelector((state: any) => state.data.cloudWallet)
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
     const dispatch = useDispatch()
@@ -42,7 +43,7 @@ const SendPopup = () => {
 
         setLoading(true)
 
-        sendMail(cloudWallet, to, subject, body, { publicKey, signTransaction, signAllTransactions }).then(() => {
+        sendMail(cloudWallet, to, subject, body, tpp).then(() => {
             dispatch(showSendPopup(false))
             refreshBalance()
             if (to == mailAccount.address + "@" + mailAccount.domain)
@@ -50,19 +51,23 @@ const SendPopup = () => {
             dispatch(setRefreshSent(true))
         }).catch((e: any) => {
             console.log(e)
-            if (e === "fund"){
+            if (e === "fund") {
                 dispatch(showDepositPopup(true))
             }
 
         }).finally(() => {
-                setLoading(false)
-            })
+            setLoading(false)
+        })
 
     }
 
     const refreshBalance = async () => {
         let balance = await balanceOf(cloudWallet.publicKey)
         dispatch(setBalance(balance))
+    }
+
+    const ontppChange = () => {
+        setTpp(!tpp)
     }
 
     return (
@@ -91,14 +96,24 @@ const SendPopup = () => {
                     </P.Text>
 
                     <P.Footer>
+                        <P.TPP>
+                            <label>
+                                <span>2PP Mail</span>
+                                <Switch height={24} width={44} uncheckedIcon={false} onColor={color.primary} checkedIcon={false} onChange={ontppChange} checked={tpp} />
+                            </label>
+                            <P.TPPInfo>
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                            </P.TPPInfo>
+                        </P.TPP>
+
                         <P.SendButton onClick={send}>
                             Send <IconNewMail />
                         </P.SendButton>
                     </P.Footer>
                 </P.Send>
 
-            </BasePopup>
-        </P.Popup>
+            </BasePopup >
+        </P.Popup >
     )
 }
 

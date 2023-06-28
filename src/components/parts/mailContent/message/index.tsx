@@ -1,26 +1,34 @@
-import { faSpinner, faTimes, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCheckCircle, faInfoCircle, faSpinner, faTimes, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as C from "./style";
 import parseHtml from "html-react-parser";
-import { setCurrentMail, setRefreshInbox, setRefreshSent } from "services/slices/data";
+import { setCurrentMail, setMailDeletionRequests, setRefreshInbox, setRefreshSent } from "services/slices/data";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { decrypt } from "utils/encryption";
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { bufferToText, deserializeUint8Array } from "utils/helpers";
-import { deleteMail, pdasToEmailAddresses } from "services/solana/mail";
+import { bufferToText, deserializeUint8Array, emailToPDA } from "utils/helpers";
+import { acceptMailDeleteRequest, createMailDeleteRequest, deleteMail, loadMailDeletionRequests, loadRequestedMailDeletions, pdasToEmailAddresses, rejectMailDeleteRequest } from "services/solana/mail";
+import { useLightbox } from "hooks/lightbox"
+import ConfirmationLb from "components/lightboxes/confirmation";
+import { PROGRAM_ID } from "services/solana/connection";
 
 const MessageMailContent = () => {
 
     const cwallet = useSelector((state: any) => state.data.cloudWallet)
     const currentMail = useSelector((state: any) => state.data.currentMail)
     const mailAccount = useSelector((state: any) => state.data.mailAccount)
+    const mailDeletionRequests = useSelector((state: any) => state.data.mailDeletionRequests)
     const dispatch = useDispatch()
     const [to, setTo] = React.useState<any>("")
 
     const [body, setBody] = React.useState<any>(null);
+
+    const { openLightbox, closeLightbox } = useLightbox()
+    const [isMarkedToDelete, setIsMarkedToDelete] = React.useState<any>(false)
+    const [deleteDetails, setDeleteDetails] = React.useState<any>(null)
 
     useEffect(() => {
 
@@ -44,7 +52,7 @@ const MessageMailContent = () => {
                 let data: Uint8Array;
 
                 if (currentMail.from === mailAccount.address + "@" + mailAccount.domain) {
-                    
+
                     data = decrypt(
                         new Uint8Array(cwallet.cryptoKeypair.secretKey),
                         new Uint8Array(cwallet.cryptoKeypair.publicKey),
@@ -72,13 +80,91 @@ const MessageMailContent = () => {
             setBody(currentMail.body)
         }
 
+        let findDelete = mailDeletionRequests.find((el: any) => el.mail === currentMail.pk)
+        if (findDelete){
+            setIsMarkedToDelete(true)
+            setDeleteDetails(findDelete)
+        }else{
+            setIsMarkedToDelete(false)
+            setDeleteDetails(null)
+        }
+
 
     }, [currentMail])
 
     const handleDelete = () => {
-        deleteMail(cwallet, new PublicKey(currentMail.pk)).then(() => {
+
+        openLightbox(
+            <ConfirmationLb
+                icon={<FontAwesomeIcon icon={faTrashCan} />}
+                content="Are you sure you want to delete this mail?"
+                onAccept={() => { proceedDelete(); closeLightbox() }}
+                onReject={() => { closeLightbox() }}
+            />
+        )
+
+    }
+
+    const proceedDelete = async () => {
+
+        if (currentMail.tpp === false) {
+            deleteMail(cwallet, new PublicKey(currentMail.pk)).then(() => {
+                dispatch(setCurrentMail(null))
+                dispatch(setRefreshInbox(true))
+                dispatch(setRefreshSent(true))
+            }).catch((err) => { })
+        } else {
+            let requested = false
+            if (currentMail.deleteRequest)
+                requested = true
+
+            if (!requested)
+                if (mailDeletionRequests.find((el: any) => el.mail === currentMail.pk))
+                    requested = true
+            
+            if (!requested){
+                loadMailDeletionRequests(cwallet, `${mailAccount.address}@${mailAccount.domain}`).then((res: any) => {
+                    let parsed = res.map((y: any) => {
+                        return {
+                            from: y.account.from.toString(),
+                            mail: y.account.mail.toString(),
+                        }
+                    })
+                    dispatch(setMailDeletionRequests(parsed))
+                })
+
+                if (mailDeletionRequests.find((el: any) => el.mail === currentMail.pk))
+                    requested = true
+
+                if (!requested) {
+                    let myrequests = await loadRequestedMailDeletions(cwallet, `${mailAccount.address}@${mailAccount.domain}`)
+                    if (myrequests.find((el: any) => el.account.mail.toBase58() === currentMail.pk))
+                        return toast.error("You already requested to delete this mail")
+                }
+            }
+
+            if (!requested)
+                createMailDeleteRequest(cwallet, new PublicKey(currentMail.pk)).then(() => {
+                    dispatch(setRefreshInbox(true))
+                    dispatch(setRefreshSent(true))
+                }).catch((err) => { })
+            else{
+                acceptDeleteRequest()
+            }
+        }
+    }
+
+    const acceptDeleteRequest = () => {
+        acceptMailDeleteRequest(cwallet, new PublicKey(currentMail.pk)).then(() => {
             dispatch(setCurrentMail(null))
-            toast.success("Mail deleted")
+            dispatch(setRefreshInbox(true))
+            dispatch(setRefreshSent(true))
+        }).catch((err) => { })
+    }
+
+    const rejectDeleteRequest = () => {
+        rejectMailDeleteRequest(cwallet, new PublicKey(currentMail.pk)).then(() => {
+            dispatch(setCurrentMail(null))
             dispatch(setRefreshInbox(true))
             dispatch(setRefreshSent(true))
         }).catch((err) => { })
@@ -87,7 +173,33 @@ const MessageMailContent = () => {
     return (
         <C.MessageMailContent>
 
-
+            {isMarkedToDelete && (
+                <C.Notifications>
+                    <C.TppNotification>
+                        <C.TppNotificationLeft>
+                            <C.TppNotificationIcon>
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                            </C.TppNotificationIcon>
+                            <C.TppNotificationContent>
+                                <C.TppNotificationTitle>
+                                    Mail Deletion Request
+                                </C.TppNotificationTitle>
+                                <C.TppNotificationText>
+                                    {deleteDetails.from === currentMail.to ? to : currentMail.from} want's to delete this mail
+                                </C.TppNotificationText>
+                            </C.TppNotificationContent>
+                        </C.TppNotificationLeft>
+                        <C.TppNotificationRight>
+                            <C.TppNotificationButton onClick={rejectDeleteRequest}>
+                                Reject
+                            </C.TppNotificationButton>
+                            <C.TppNotificationButton btntype="accept" onClick={acceptDeleteRequest}>
+                                Accept and Delete
+                            </C.TppNotificationButton>
+                        </C.TppNotificationRight>
+                    </C.TppNotification>
+                </C.Notifications>
+            )}
 
             <C.Upper>
                 <C.Subject>
@@ -106,6 +218,11 @@ const MessageMailContent = () => {
                         </C.Date>
                     </C.UpperLeft>
                     <C.UpperRight>
+                        {currentMail.tpp && (
+                            <C.Tpp>
+                                <FontAwesomeIcon icon={faCheckCircle} /> <span>2PP Mail</span>
+                            </C.Tpp>
+                        )}
                         <C.Delete onClick={handleDelete}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </C.Delete>

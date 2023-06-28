@@ -7,9 +7,10 @@ const SESSION_HASH = 'MAILXx' + Math.ceil(Math.random() * 1e9)
 export const SOLANA_CONNECTION = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SOLANA_CONNECTION_DEVNET = new Connection("https://api.devnet.solana.com", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SOLANA_CONNECTION_FINALIZED = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
-export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
+export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc-devnet.helius.xyz/?api-key=21034647-170b-4a53-bbd5-b0ba3108938c", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 //export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc.helius.xyz/?api-key=3929efa1-32e5-4164-ba40-f1d6c115f2c5", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SNS_PROGRAM_ID = new PublicKey('namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX');
+export const PROGRAM_ID = new PublicKey('2WTXnFHx5ZujYaJpwbqnaaB2aqc1yn6m5rZqNdQUCu61');
 
 export const WaitForTransaction = (signature: string) => new Promise(async (resolve, reject) => {
     let done = false

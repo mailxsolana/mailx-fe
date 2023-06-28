@@ -16,6 +16,10 @@ export interface DataState {
     mailAccountCreationRequests: any,
     refreshAccountsDashboard: boolean,
 
+    mailDeletionRequests:any,
+    sentMails: any,
+    inboxMails: any,
+
     currentWallet: any,
 }
 
@@ -33,6 +37,10 @@ const initialState: DataState = {
     createForSomeone: false,
     mailAccountCreationRequests: [],
     refreshAccountsDashboard: false,
+
+    mailDeletionRequests: [],
+    sentMails: [],
+    inboxMails: [],
 
     currentWallet: null,
 }
@@ -74,12 +82,21 @@ export const dataSlice = createSlice({
         setRefreshAccountsDashboard: (state, action: PayloadAction<boolean>) => {
             state.refreshAccountsDashboard = action.payload
         },
+        setMailDeletionRequests: (state, action: PayloadAction<any>) => {
+            state.mailDeletionRequests = action.payload
+        },
+        setSentMails: (state, action: PayloadAction<any>) => {
+            state.sentMails = action.payload
+        },
+        setInboxMails: (state, action: PayloadAction<any>) => {
+            state.inboxMails = action.payload
+        },
         setCurrentWallet: (state, action: PayloadAction<any>) => {
             state.currentWallet = action.payload
-        }
+        },
     }
 })
 
-export const { setCloudWallet, setMailAccount, setBalance, setCurrentMail, setRefreshInbox, setRefreshSent, setMailPage, setCustomDomain, setCreateForSomeone, setCurrentWallet, setMailAccountCreationRequests, setRefreshAccountsDashboard } = dataSlice.actions
+export const { setCloudWallet, setMailAccount, setBalance, setCurrentMail, setRefreshInbox, setRefreshSent, setMailPage, setCustomDomain, setCreateForSomeone, setMailDeletionRequests, setCurrentWallet, setMailAccountCreationRequests, setRefreshAccountsDashboard, setSentMails, setInboxMails } = dataSlice.actions
 
 export default dataSlice.reducer

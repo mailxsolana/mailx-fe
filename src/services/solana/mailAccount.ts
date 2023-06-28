@@ -18,7 +18,7 @@ const viewWallet = {
     publicKey: null
 } as unknown as Wallet
 
-const programId = "CigDTeq8uMe4B7TrTVJpD1viFzkXgphw6Zx97gtMtBVM"
+const programId = "2WTXnFHx5ZujYaJpwbqnaaB2aqc1yn6m5rZqNdQUCu61"
 const MAIL_ACCOUNT_SIZE = 233;
 const DEFAULT_DOMAIN = "mailx"
 
@@ -151,7 +151,7 @@ export const createMailAccount = async (cwallet: any, address: string, domain: a
                 .transaction()
         }
 
-        tx.recentBlockhash = (await SOLANA_CONNECTION_FINALIZED.getLatestBlockhash("finalized")).blockhash;
+        tx.recentBlockhash = (await SOLANA_CONNECTION.getLatestBlockhash("finalized")).blockhash;
         tx.feePayer = authority.publicKey;
 
         try{
@@ -182,7 +182,7 @@ export const createMailAccount = async (cwallet: any, address: string, domain: a
         try {
 
             const signed = await authority.signTransaction(tx);
-            sig = await SOLANA_CONNECTION_FINALIZED.sendRawTransaction(signed.serialize(), { skipPreflight: false, preflightCommitment: "finalized" });
+            sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "confirmed" });
             console.log("Transaction sent", sig)
             
             if (to === null) {
@@ -268,7 +268,7 @@ export const claimMailAccount = async (cwallet: any, request: any, authority: an
     tx.partialSign(cwalletSigner);
 
     const signed = await authority.signTransaction(tx);
-    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "finalized" });
+    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
     console.log("Transaction sent", sig)
     let loading = toast.loading("Claiming Mail Account")
     try {
@@ -301,7 +301,7 @@ export const rejectMailAccountRequest = async (request: any, authority: any) => 
     tx.feePayer = authority.publicKey;
 
     const signed = await authority.signTransaction(tx);
-    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "finalized" });
+    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
     console.log("Transaction sent", sig)
     let loading = toast.loading("Rejecting Mail Account Request")
     try {
@@ -375,7 +375,7 @@ export const deleteMailAccount = async (account: any, authority: any) => {
 
     const signed = await authority.signTransaction(tx);
 
-    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: true, preflightCommitment: "finalized" });
+    const sig = await SOLANA_CONNECTION.sendRawTransaction(signed.serialize(), { skipPreflight: false, preflightCommitment: "confirmed" });
     console.log("Transaction sent", sig)
     let loading = toast.loading("Deleting Mail Account")
     try {

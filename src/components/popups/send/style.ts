@@ -40,7 +40,7 @@ export const Text = styled.div`
 
 export const Footer = styled.div`
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
     margin-top:8px;
 `
 
@@ -66,4 +66,23 @@ export const SendButton = styled.div`
         background: linear-gradient(87.12deg, #3166DF 0%, #004EFF 100%);
         box-shadow: 0px 4px 16px rgba(19, 79, 214, 0.32);
     }
+`
+
+export const TPP = styled.div`
+    color: ${color.darkerGray};
+    display:flex;
+    align-items:center;
+    font-weight:500;
+    & label {
+        display:flex;
+        align-items:center;
+    }
+
+    & span{
+        margin-right:8px;
+    }
+`
+
+export const TPPInfo = styled.div`
+    margin-left:8px;
 `

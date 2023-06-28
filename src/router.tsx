@@ -7,6 +7,7 @@ import { Wallet } from "wallet";
 import App from "./app";
 import { store } from "./services/store";
 import Popups from "components/popups";
+import { LightboxProvider } from "hooks/lightbox";
 
 export default function router() {
 
@@ -17,19 +18,21 @@ export default function router() {
             </div>
             <Wallet>
                 <BrowserRouter>
-                    <App />
-                    <Popups />
-                    <Toaster
-                        position="top-center"
-                        reverseOrder={false}
-                        toastOptions={{
-                            style: {
-                                border: "1px solid " + color.black,
-                                color: color.white,
-                                background: Hex2Rgba(color.black, 0.95),
-                            },
-                        }}
-                    />
+                    <LightboxProvider>
+                        <App />
+                        <Popups />
+                        <Toaster
+                            position="top-center"
+                            reverseOrder={false}
+                            toastOptions={{
+                                style: {
+                                    border: "1px solid " + color.black,
+                                    color: color.white,
+                                    background: Hex2Rgba(color.black, 0.95),
+                                },
+                            }}
+                        />
+                    </LightboxProvider>
                 </BrowserRouter>
             </Wallet>
 
