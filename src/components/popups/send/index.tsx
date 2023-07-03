@@ -12,7 +12,7 @@ import { IconNewMail } from "utils/icons"
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 //@ts-ignore
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { setBalance, setRefreshSent, setRefreshInbox } from "services/slices/data"
+import { setBalance, setRefreshSent, setRefreshInbox, setMailPage } from "services/slices/data"
 import { balanceOf } from "services/solana/cwallet"
 import { toast } from "react-hot-toast"
 import { sendMail } from "services/solana/mail"
@@ -46,9 +46,10 @@ const SendPopup = () => {
         sendMail(cloudWallet, to, subject, body, tpp).then(() => {
             dispatch(showSendPopup(false))
             refreshBalance()
-            if (to == mailAccount.address + "@" + mailAccount.domain)
+            /*if (to == mailAccount.address + "@" + mailAccount.domain)
                 dispatch(setRefreshInbox(true))
-            dispatch(setRefreshSent(true))
+            dispatch(setRefreshSent(true))*/
+            dispatch(setMailPage("inbox"))
         }).catch((e: any) => {
             console.log(e)
             if (e === "fund") {
