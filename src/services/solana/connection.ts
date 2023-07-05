@@ -4,10 +4,10 @@ import { store } from "services/store";
 import { sleep } from "utils/helpers";
 
 const SESSION_HASH = 'MAILXx' + Math.ceil(Math.random() * 1e9)
-export const SOLANA_CONNECTION = new Connection("https://compatible-proud-dream.solana-devnet.discover.quiknode.pro/7c6f9927d9f70e21245b414d3f196dc1e4794d48/", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
+export const SOLANA_CONNECTION = new Connection("https://devnet.helius-rpc.com/?api-key=3e4bcd2b-c94b-4819-abc9-38e661b60e8f", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SOLANA_CONNECTION_DEVNET = new Connection("https://api.devnet.solana.com", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
-export const SOLANA_CONNECTION_FINALIZED = new Connection("https://compatible-proud-dream.solana-devnet.discover.quiknode.pro/7c6f9927d9f70e21245b414d3f196dc1e4794d48/", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
-export const SOLANA_CONNECTION_BUNDLR = new Connection("https://compatible-proud-dream.solana-devnet.discover.quiknode.pro/7c6f9927d9f70e21245b414d3f196dc1e4794d48/", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
+export const SOLANA_CONNECTION_FINALIZED = new Connection("https://devnet.helius-rpc.com/?api-key=3e4bcd2b-c94b-4819-abc9-38e661b60e8f", { commitment: 'finalized', httpHeaders: { "x-session-hash": SESSION_HASH } });
+export const SOLANA_CONNECTION_BUNDLR = new Connection("https://devnet.helius-rpc.com/?api-key=3e4bcd2b-c94b-4819-abc9-38e661b60e8f", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 //export const SOLANA_CONNECTION_BUNDLR = new Connection("https://rpc.helius.xyz/?api-key=3929efa1-32e5-4164-ba40-f1d6c115f2c5", { commitment: 'confirmed', httpHeaders: { "x-session-hash": SESSION_HASH } });
 export const SNS_PROGRAM_ID = new PublicKey('namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX');
 export const PROGRAM_ID = new PublicKey('2WTXnFHx5ZujYaJpwbqnaaB2aqc1yn6m5rZqNdQUCu61');
